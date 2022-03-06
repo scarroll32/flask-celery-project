@@ -6,7 +6,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 from project.celery_utils import make_celery
-from project.config import config
+from project.config import environment
 
 # instanstiate the extensions
 db = SQLAlchemy()
@@ -16,12 +16,13 @@ ext_celery = FlaskCeleryExt(create_celery_app=make_celery)
 def create_app(config_name=None):
     if config_name is None:
         config_name = os.environ.get("FLASK_CONFIG", "development")
+    print(config_name)
 
     # instantiate the app
     app = Flask(__name__)
 
     # set config
-    app.config.from_object(config[config_name])
+    app.config.from_object(environment[config_name])
 
     # set up extensions
     db.init_app(app)

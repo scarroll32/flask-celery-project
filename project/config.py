@@ -20,7 +20,7 @@ class ProductionConfig(BaseConfig):
     """Production configuration"""
     DEBUG = False
 
-config = {
+environment = {
     "development": DevelopmentConfig,
     "production": ProductionConfig,
 }

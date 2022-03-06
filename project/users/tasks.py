@@ -1,6 +1,8 @@
 import random
+import logging
 import requests
 
+from celery.signals import after_setup_logger
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from celery.signals import task_postrun
@@ -63,3 +65,14 @@ def task_send_welcome_email(user_pk):
     from project.users.models import User
     user = User.query.get(user_pk)
     logger.info(f'send email to {user.email} {user.id}')
+
+@shared_task()
+def task_test_logger():
+    logger.info('test')
+
+@after_setup_logger.connect()
+def on_after_setup_logger(logger, **kwargs):
+    formatter = logger.handlers[0].formatter
+    file_handler = logging.FileHandler('celery.log')
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)

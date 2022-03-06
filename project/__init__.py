@@ -4,6 +4,7 @@ from flask import Flask
 from flask_celeryext import FlaskCeleryExt
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.csrf import CSRFProtect
 
 from project.celery_utils import make_celery
 from project.config import config
@@ -12,6 +13,7 @@ from project.config import config
 db = SQLAlchemy()
 migrate = Migrate()
 ext_celery = FlaskCeleryExt(create_celery_app=make_celery)
+csrf = CSRFProtect()
 
 def create_app(config_name=None):
     if config_name is None:
@@ -27,6 +29,7 @@ def create_app(config_name=None):
     db.init_app(app)
     migrate.init_app(app, db)
     ext_celery.init_app(app)
+    csrf.init_app(app)
 
     # register blueprints
     from project.users import users_blueprint

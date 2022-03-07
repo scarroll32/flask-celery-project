@@ -52,11 +52,19 @@ class DevelopmentConfig(BaseConfig):
     """Development configuration"""
     DEBUG = True
 
+class TestingConfig(BaseConfig):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'
+    SOCKETIO_MESSAGE_QUEUE = None
+    SECRET_KEY = 'my secret'
+    WTF_CSRF_ENABLED = False
+
 class ProductionConfig(BaseConfig):
     """Production configuration"""
     DEBUG = False
 
 config = {
     "development": DevelopmentConfig,
+    "testing": TestingConfig,
     "production": ProductionConfig,
 }
